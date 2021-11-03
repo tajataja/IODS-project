@@ -1,4 +1,4 @@
-# Insert chapter 2 title here
+# Chapter 2 - results
 
 *Describe the work you have done this week and summarize your learning.*
 
@@ -10,4 +10,17 @@
 date()
 ```
 
-Here we go again...
+> Hello again
+
+
+There is not much results to show. I have successfully pushed the text from my Rstudio to Github. The beginning was little messy, but with the help of helpdesk and my colleague, everything works now. I know how to write _cursive_, **bold** and even add a [link](https://tajataja.github.io/IODS-project/). Pretty impressive, huh?
+
+
+***
+
+
+In addition I completed the two first sets on DataCamp. Such fun stuff!
+
+
+Regards,
+_Janina_
