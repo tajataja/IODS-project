@@ -12,7 +12,7 @@ date()
 *How are you feeling right now? What do you expect to learn? Where did you hear about the course?*
 
 
-####Hello!
+> Hello!
 
 My name is **Janina** and I am at the moment working under INAR *(Atmospheric and Earth System Research)* in Kumpula. I have been studying meteorology and I finished my master's studies couple days ago! Now I am applying to Doctoral Studies with a topic of climate education. As I am moving towards education and educational research I am in need of R and statistical skills. One of my colleagues from Faculty of Educational studies suggested this course.
 
@@ -20,9 +20,11 @@ I am feeling quite excited. At first I was stressed to get back to studying but 
 
 ***
 
+
 [My Repository](https://github.com/tajataja/IODS-project.git)
+
 
 Have a lovely day,
 
-> *Janina*
+*Janina*
 
