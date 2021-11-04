@@ -10,7 +10,7 @@
 date()
 ```
 
-> Hello again
+> Hello there
 
 
 Results coming up next week, stay tuned!
