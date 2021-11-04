@@ -1,5 +1,5 @@
 
-# About the project
+# About Janina
 
 *A short description about the course and a link to my GitHub repository.*
 
