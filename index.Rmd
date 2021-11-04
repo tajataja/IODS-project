@@ -1,5 +1,6 @@
 ---
 title: "IODS course project"
+author: "Janina Taurinen"
 output:
   html_document:
     theme: cosmo
