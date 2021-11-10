@@ -43,7 +43,7 @@ p
 
 ```
 <br /> 
-<br />So here we have a large plot matrix of all the 7 variables. Red colour indicates female answerers and blue men answerers. It is worth noticing that there are twice as many female answerers as men.
+<br />So here we have a large plot matrix of all the 7 variables. Red colour indicates female answerers and blue men answerers. It is worth noticing that there are nearly twice as many female answerers as men and that ajority of the students are 20 to 30 years old.
 
 In the column most left we have the distribution of the observations presented in a horizontal way. The same distributions are presented also in a more visual way diagonally. The distributions of age and points are relatively similar between female and men answerers and the most differences can be found from distributions of attitude and surface learning. 
 
@@ -52,7 +52,12 @@ Below this diagonal, we have scatter plots between two variables and above the d
 The **highest** correlation is between points and attitude (0.437). The next highest correlation is **negative**, and it is between surface approach and deep learning (-0.324). The **weakest** correlation (-0.0101) is between deep learning and points.
 <br /><br /> 
 
+
 > Linear regression and correlation
+
+<br /> Before going to the multiple regression, we will be looking at three chosen variables related to the exam point separately. The chosen explanatory variables are _attitude, deep_ and _surf_. The significance will be considered separately and taken into account when moving to multiple regression. 
+<br /><br /> 
+
 
 ```{r}
 #y ~ x
@@ -69,9 +74,13 @@ qplot(attitude, points, data = learning2014) + geom_smooth(method = "lm")
 ```
 
 <br /> 
-<br />So here we have a linear regression between attitude (explanatory variable) and exam points (dependent variable). The fitted regression line fits well and is directed upward, as there is a positive correlation between the variables. 
+<br />Here we have a linear regression between attitude (explanatory variable) and exam points (dependent variable). The fitted regression line fits well and is directed upward, as there is a positive correlation between the variables. 
 
-The significance can be observed from the summary of the lm-model. If we look at the p-value (Pr(>|t|)) we see that the value is really small (4.12e-09 << |0.05|). This indicates that there **is a statistical relationship** between attitude and exam points.
+The positive regression coefficient can be numerically observed from the column 'Estimate' _(summary of the lm-model below)_. Regression coefficient measures the change in the mean response related to a unit change in the corresponding explanatory variable when values of all the other explanatory variables remain unchanged. The next column, 'Standard Error' describes how far the residual points are from the regression line, ergo the difference between an observed value of the response variable and the fitted value. The residuals estimate the error terms in the model, the smaller the value, the less there is error. 
+
+The significance can be observed using p-value (Pr(>|t|)). The lower _(closer to zero)_ the p-value is the less probability there is that the correlation (or coefficient of the regression model) would be zero. In case the p-value exceeds 0.05 the relation between explanatory and target variable has no significance, as there is over 5 % risk for the coefficient to be zero. 
+
+Let us look at the p-value of our case. One can see that the value is really small (4.12e-09 << 0.05). This indicates that there **is a statistical relationship** between attitude and exam points.
 <br /><br /> 
 
 
@@ -96,7 +105,7 @@ qplot(deep, points, data = learning2014) + geom_smooth(method = "lm")
 <br /> 
 <br />Here we have a linear regression between deep learning (explanatory variable) and exam points (dependent variable). The fitted regression line is nearly horizontal, which indicates that there is a weak correlation (if any). 
 
-Now, if we look at the p-value (Pr(>|t|)) we see that the value is really fairly large (0.897 >> |0.05|). This indicates that there **is _no_ statistical relationship** between deep learning and exam points.
+Now, looking at the p-value (Pr(>|t|)) shows that the value is fairly large (0.897 >> 0.05). This indicates that there **is _no_ statistical relationship** between deep learning and exam points.
 <br /><br /> 
 
 
@@ -119,9 +128,9 @@ qplot(surf, points, data = learning2014) + geom_smooth(method = "lm")
 ```
 
 <br /> 
-<br />Lastly we have a linear regression between surface approach (explanatory variable) and exam points (dependent variable). The fitted regression line is now negative. Thus, there is correlation between the variables, but it is inverse. 
+<br />Lastly we have a linear regression between surface approach (explanatory variable) and exam points (dependent variable). The fitted regression line is negative. Thus, the correlation between variables is inverse. 
 
-Let us check again the p-value (Pr(>|t|)). We can see that the value is just outside the level of significance (0.0635 > |0.05|). This indicates that there **is _no_ statistical relationship** between surface approach and exam points. However, the p-value is so close to the level of significance that in some cases it could be taken into account _(this needs to be done with careful consideration)_.
+Let us check again the p-value (Pr(>|t|)). We can see that the value is just outside the level of significance (0.0635 > 0.05). This indicates that there **is _no_ statistical relationship** between surface approach and exam points. However, the p-value is so close to the level of significance that in some cases it could be taken into account _(this needs to be done with careful consideration)_.
 <br /><br />
 
 ```{r}
@@ -135,7 +144,7 @@ print(summary(my_model3))
 ```
 
 <br /> 
-<br />To make the nexttask meaningful, I will be keeping two of the explanatory variables: _attitude_ and _surface approach_. The latter **does not have statistical significance** but I would not be able to do the multiple regression, if I would be dropping it off. 
+<br />To make the next task meaningful, I will be keeping two of the explanatory variables: _attitude_ and _surface approach_. The latter **does not have statistical significance** but I would not be able to do the multiple regression, if I would be dropping it off. 
 
 Therefore, it stays.
 
@@ -144,6 +153,15 @@ As _deep learning_ has no significance what so ever, it will be excluded from th
 
 
 > Multiple regression
+
+<br /> Below we have a summary of a multiple regression including all three variables. Already from the standard error we can see how the value is smallest for the attitude (strongest correlation) and highest for deep learning (weakest correlation).
+
+The multiple R-squared is a square of the correlation coefficient between all three explanatory variables and exam points. The value in this case is 0.2024, meaning that slightly over 20% of the variation in exam points is explained by the variation in the three explanatory variables. 
+
+The value of multiple R-squared is known to increase when adding new explanatory variables, even if the added variable is not useful. Thereby, excluding a variable most likely will decrease the value of multiple R-squared. Thus, it may be useful to also look at the adjusted R-squared, as there the R-squared adjusts for the number of explanatory variables in a model. When all the variables are included the adjusted R-square is 0.1876 (~ 18.8 % of the variation explained). 
+
+As it was pointed above, the deep learning has no significance when it comes to the exam points. Let us examine what happens when we exclude it from the multiple regression.
+<br /><br />
 
 ```{r}
 #Creating a regression model with multiple explanatory variables
@@ -155,12 +173,42 @@ print(summary(my_model4))
 
 ```
 
+
 <br /> 
-<br /> _INTERPRETATION ????_
+<br /> As expected the value of multiple R-squared decreases, but only slightly. The new values _(see below)_ are; 
+
+* Multiple R-squared 0.1953 (~ 19.5 % of the variation explained) _vs. 20 %_
+* Adjusted R-squared: 0.1854 (~ 18.5 % of the variation explained) _vs. 18.8 %_
+
+There is only small decrease in the R-squared values after excluding deep learning. Thus, slightly less of the variance in exam points is explained by attitude + surf compared to the case of all three variables. 
+
+In addition to R-squared values we may also look at, for example, the p-value. When all the variables are included, the p-value is 5.217e-08 _(above)_ and after deep learning has excluded the p-value is 2.041e-08 _(below)_, ergo the significance has strengthen. Although, the significance is notable in both cases.
+
+The small differences might be due to the fact, that the surface approach on its own does not have significance either. The R-squared value and p-value would be better when taking only attitude into account.
+
+
 <br /><br />
 
 
+```{r}
+#Creating a regression model with multiple explanatory variables
+my_model5 <- lm(points ~ attitude + surf, data = learning2014)
+
+#Printing out a summary of the model
+print(summary(my_model5))
+ 
+
+```
+
+
+<br /> 
+
 > Diagnostic plots
+
+
+<br /> Next we will draw three diagnostic plots out of the multiple regression, which explanatory variables are above-mentioned attitude and surface learning. The chosen diagnostic plots are _Residuals vs Fitted, Normal QQ-plot_ and _Residuals vs Leverage_ _(table below, 1, 2, 5)_. 
+<br /><br />
+
 
 _cheatsheet_
 
@@ -176,24 +224,35 @@ which | Graphics
 
 ```{r}
 #Creating a regression model with multiple explanatory variables
-my_model5 <- lm(points ~ attitude + surf, data = learning2014)
+my_model6 <- lm(points ~ attitude + surf, data = learning2014)
 
 #Drawing diagnostic plots using the plot() function. Plots 1, 2 and 5 chosen
 par(mfrow = c(2,2))
-plot(my_model5, which = c(1,2,5))
+plot(my_model6, which = c(1,2,5))
 
 
 ```
 
 <br /> 
-<br /> _INTERPRETATION_ 
+<br /> The first diagnostic plot **_(Residual vs Fitted)_ shows if residuals have non-linear patterns or not**. Let us see how well the scattered residuals distribute around the fitted regression line. As the dots are evenly distributed throughout the horizontal line, the fitted model seems to be appropriate with no distinctive pattern. Only couple of the observations are standing out on the negative side of the red line. These points are _extreme points_ and have been numbered (145, 56, 35).
+
+The second diagnostic plot **_(Normal Q-Q)_ is for checking if the residuals are normally distributed**. As the residuals are mainly well lined with the straight dashed line we may say that the residuals are normally distributed. However, the residuals are seldom in a perfect straight line, and also here we can see how the extreme points (numbered) are notably on the negative side of the dashed line. Similar behavior can be observed on the upper corner of the plot. Great majority of the standardized residuals do follow the dashed line moderately well.
+
+The last diagnostic plot **_(Residuals vs Leverage)_ indicates if there are any influential observations.** The leverage of an observation is based on how much the observation's value on the explanatory variable differs from the mean of the explanatory variable itself. The larger the leverage the more influence the observation potentially have on the estimations of the model parameters. The red dashed line is a Cook's distance, which measures the influence of an observation on the estimation of all the parameters in the model. Our case is quite typical as there is no influential cases. All the residuals are well inside the Coock's distance lines (which are actually not even visible in the figure). If there would be some values at the upper and lower right corner one would need to be careful. Those observations would be **influential against** a regression line. 
+
 <br /><br />
 
 
 ***
 
 <br /> 
-<br /> _Summary of my learning_ 
+
+> _Summary of my learning_
+
+<br /> This week's tasks have been mainly fun and really educating. However, they have required a several days full of work. The given workload is not light for me as I do not have much previous knowledge of the statistical methods. A lot new to learn. The textbook is helpful in this sense but there is a lot of material to scan through. 
+It is good to have real data to work with. It helps to understand what do all the correlations, significance thresholds and diagnostic plots really mean. Especially the diagnostic plots and their interpretations were new to me.
+
+Coding with R is not familiar to me, but my previous coding background with python is somewhat helpful. The DataCamp is extremely supportive and it does pay off to do the DataCamp-exercises carefully first. It takes time but helps with producing my own codes. I got the practicalities work last week and it makes me happy that everything is still working this week. Thus, I can fully focus on the tasks and the analysis.
 <br /><br />
 
 ***
