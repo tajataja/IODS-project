@@ -8,7 +8,7 @@
 > Hello there
 
 
-Let us look closer to the data resulting from the Data Wrangling. 
+Let us look closer to the data resulting from the [Data Wrangling](https://github.com/tajataja/IODS-project/blob/master/data/create_learning2014.R). 
 <br /><br /> 
 
 ```{r}
