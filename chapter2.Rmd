@@ -1,14 +1,12 @@
 # Chapter 2 - Regression and model validation
 
-*Describe the work you have done this week and summarize your learning.*
+<br /> *Describe the work you have done this week and summarize your learning.*
 
 ***
 
+## Overview of the data
 
-> Hello there
-
-
-Let us look closer to the data - collected in 2014/15 in Finland from a survey about learning of students during a statistics course - resulting from the [Data Wrangling](https://github.com/tajataja/IODS-project/blob/master/data/create_learning2014.R). 
+<br /> Let us look closer to the data - collected in 2014/15 in Finland from a survey about learning of students during a statistics course - resulting from the [Data Wrangling](https://github.com/tajataja/IODS-project/blob/master/data/create_learning2014.R). 
 <br /><br /> 
 
 ```{r}
@@ -48,7 +46,9 @@ dim(learning2014)
 The values have been scaled by taking the mean. All the observations with points = 0 have been excluded.
 <br /><br />
 
-> Matrix plot
+## Graphical overview of the data - Matrix plot
+
+<br /> 
 
 ```{r}
 
@@ -173,7 +173,7 @@ As _deep learning_ has no significance what so ever, it will be excluded from th
 <br /><br />
 
 
-> Multiple regression
+## Multiple regression - Multiple R-squared
 
 <br /> Below we have a summary of a multiple regression including all three variables. Already from the standard error we can see how the value is smallest for the attitude (strongest correlation) and highest for deep learning (weakest correlation).
 
@@ -230,7 +230,7 @@ The small differences might be due to the fact, that the surface approach on its
 <br /><br />
 
 
-> Diagnostic plots
+## Diagnostic plots
 
 
 <br /> Next we will draw three diagnostic plots out of the multiple regression, which explanatory variables are above-mentioned attitude and surface approach The chosen diagnostic plots are _Residuals vs Fitted, Normal QQ-plot_ and _Residuals vs Leverage_ _(table below, 1, 2, 5)_. 

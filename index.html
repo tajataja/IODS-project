@@ -173,7 +173,13 @@ pre code {
 <ul>
 <li><a href="#introduction-to-open-data-science---course-project">Introduction to Open Data Science - Course Project</a></li>
 <li><a href="#about-janina">About Janina</a></li>
-<li><a href="#chapter-2---regression-and-model-validation">Chapter 2 - Regression and model validation</a></li>
+<li><a href="#chapter-2---regression-and-model-validation">Chapter 2 - Regression and model validation</a>
+<ul>
+<li><a href="#overview-of-the-data">Overview of the data</a></li>
+<li><a href="#graphical-overview-of-the-data---matrix-plot">Graphical overview of the data - Matrix plot</a></li>
+<li><a href="#multiple-regression---multiple-r-squared">Multiple regression - Multiple R-squared</a></li>
+<li><a href="#diagnostic-plots">Diagnostic plots</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -187,7 +193,7 @@ pre code {
 <pre class="r"><code># &quot;R chunk&quot; for R code.
 
 date()</code></pre>
-<pre><code>## [1] &quot;Thu Nov 11 09:25:51 2021&quot;</code></pre>
+<pre><code>## [1] &quot;Thu Nov 11 13:43:43 2021&quot;</code></pre>
 <p><em>How are you feeling right now? What do you expect to learn? Where did you hear about the course?</em></p>
 <blockquote>
 <p>Hello!</p>
@@ -202,14 +208,13 @@ date()</code></pre>
 </div>
 <div id="chapter-2---regression-and-model-validation" class="section level1">
 <h1>Chapter 2 - Regression and model validation</h1>
-<p><em>Describe the work you have done this week and summarize your learning.</em></p>
+<p><br /> <em>Describe the work you have done this week and summarize your learning.</em></p>
 <hr />
-<blockquote>
-<p>Hello there</p>
-</blockquote>
-<p>Let us look closer to the data - collected in 2014/15 in Finland from a survey about learning of students during a statistics course - resulting from the <a href="https://github.com/tajataja/IODS-project/blob/master/data/create_learning2014.R">Data Wrangling</a>. <br /><br /></p>
+<div id="overview-of-the-data" class="section level2">
+<h2>Overview of the data</h2>
+<p><br /> Let us look closer to the data - collected in 2014/15 in Finland from a survey about learning of students during a statistics course - resulting from the <a href="https://github.com/tajataja/IODS-project/blob/master/data/create_learning2014.R">Data Wrangling</a>. <br /><br /></p>
 <pre class="r"><code>date()</code></pre>
-<pre><code>## [1] &quot;Thu Nov 11 09:25:52 2021&quot;</code></pre>
+<pre><code>## [1] &quot;Thu Nov 11 13:43:43 2021&quot;</code></pre>
 <pre class="r"><code>#Reading the data
 learning2014 = read.table(file=&quot;learning2014.txt&quot;, sep=&quot;,&quot;, header=TRUE)
 
@@ -246,9 +251,10 @@ str(learning2014)</code></pre>
 <li>Tilastotiede on hyödyksi tulevissa opinnoissani</li>
 </ul>
 <p>The values have been scaled by taking the mean. All the observations with points = 0 have been excluded. <br /><br /></p>
-<blockquote>
-<p>Matrix plot</p>
-</blockquote>
+</div>
+<div id="graphical-overview-of-the-data---matrix-plot" class="section level2">
+<h2>Graphical overview of the data - Matrix plot</h2>
+<p><br /></p>
 <pre class="r"><code>library(GGally)</code></pre>
 <pre><code>## Loading required package: ggplot2</code></pre>
 <pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
@@ -367,9 +373,9 @@ print(summary(my_model3))</code></pre>
 <p><br /> <br />To make the next task meaningful, I will be keeping two of the explanatory variables: <em>attitude</em> and <em>surface approach</em>. The latter <strong>does not have statistical significance</strong> but I would not be able to do the multiple regression, if I would be dropping it off.</p>
 <p>Therefore, it stays.</p>
 <p>As <em>deep learning</em> has no significance what so ever, it will be excluded from the next phase. <br /><br /></p>
-<blockquote>
-<p>Multiple regression</p>
-</blockquote>
+</div>
+<div id="multiple-regression---multiple-r-squared" class="section level2">
+<h2>Multiple regression - Multiple R-squared</h2>
 <p><br /> Below we have a summary of a multiple regression including all three variables. Already from the standard error we can see how the value is smallest for the attitude (strongest correlation) and highest for deep learning (weakest correlation).</p>
 <p><strong>The multiple R-squared</strong> is a square of the correlation coefficient between all three explanatory variables and exam points. The value in this case is 0.2024, meaning that slightly over 20% of the variation in exam points is explained by the variation in the three explanatory variables.</p>
 <p>The value of multiple R-squared is known to increase when adding new explanatory variables, even if the added variable is not useful. Thereby, excluding a variable most likely will decrease the value of multiple R-squared. Thus, it may be useful to also look at the adjusted R-squared, as there the R-squared adjusts for the number of explanatory variables in a model. When all the variables are included the adjusted R-square is 0.1876 (~ 18.8 % of the variation explained).</p>
@@ -433,9 +439,9 @@ print(summary(my_model5))</code></pre>
 <p>In addition to R-squared values we could also look at, for example, the p-value. When all the variables are included, the p-value is 5.217e-08 <em>(first summary)</em> and after deep learning has excluded the p-value is 2.041e-08 <em>(second summary)</em>, ergo the significance has strengthen. Although, the significance is notable in both cases.</p>
 <p>The small differences might be due to the fact, that the surface approach on its own does not have significance either. The R-squared value and p-value would be better when taking only attitude into account.</p>
 <p><br /><br /></p>
-<blockquote>
-<p>Diagnostic plots</p>
-</blockquote>
+</div>
+<div id="diagnostic-plots" class="section level2">
+<h2>Diagnostic plots</h2>
 <p><br /> Next we will draw three diagnostic plots out of the multiple regression, which explanatory variables are above-mentioned attitude and surface approach The chosen diagnostic plots are <em>Residuals vs Fitted, Normal QQ-plot</em> and <em>Residuals vs Leverage</em> <em>(table below, 1, 2, 5)</em>. <br /><br /></p>
 <p><em>cheatsheet</em></p>
 <table>
@@ -494,6 +500,7 @@ plot(my_model6, which = c(1,2,5))</code></pre>
 <p>Regards, <em>Janina</em></p>
 <hr />
 <p><em>(more chapters to be added similarly as we proceed with the course!)</em></p>
+</div>
 </div>
 
 
