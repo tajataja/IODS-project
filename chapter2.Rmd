@@ -8,7 +8,7 @@
 > Hello there
 
 
-Let us look closer to the data resulting from the [Data Wrangling](https://github.com/tajataja/IODS-project/blob/master/data/create_learning2014.R). 
+Let us look closer to the data - collected in 2014/15 in Finland from a survey about learning of students during a statistics course - resulting from the [Data Wrangling](https://github.com/tajataja/IODS-project/blob/master/data/create_learning2014.R). 
 <br /><br /> 
 
 ```{r}
@@ -24,7 +24,28 @@ dim(learning2014)
 ```
 
 
-<br />The structure of the data looks good. There are 166 observations of  7 variable. The variables are _gender, age, attitude, deep (learning), stra(tegic approach), surf(ace approach)_ and _points_. The values of 'attitude', 'deep', 'stra' and 'surf' have been scaled by taking the mean. All the observations with points = 0 have been excluded.
+<br />The structure of the data looks good. There are 166 observations of  7 variable. The variables are _gender, age, attitude, deep (learning), stra(tegic approach), surf(ace approach)_ and _points_. 
+
+'Deep', 'stra' and 'surf' combine 8 subscales, all including 4 questions:
+
+* Deep learning: seeking meaning, relating ideas, use of evidence
+* Surface approach: lack of purpose, unrelated memorizing, syllabus-boundness
+* Strategic approach: organized studying, time management
+
+'Attitude' includes 10 questions:
+
++ Koen osaavani tilastotiedettä
++ Tilastotieteestä tulee olemaan hyötyä työelämässä
++ Olen kiinnostunut ymmärtämään tilastotiedettä
++ Pärjäsin hyvin koulun matematiikassa
++ Olen kiinnostunut oppimaan tilastotiedettä
++ Koen epävarmuutta tilastotieteen tehtävien kanssa
++ Pidän tilastotieteestä
++ Tilastotiede pelottaa minua
++ Luotan matemaattisiin taitoihini
++ Tilastotiede on hyödyksi tulevissa opinnoissani
+
+The values have been scaled by taking the mean. All the observations with points = 0 have been excluded.
 <br /><br />
 
 > Matrix plot
@@ -43,13 +64,13 @@ p
 
 ```
 <br /> 
-<br />So here we have a large plot matrix of all the 7 variables. Red colour indicates female answerers and blue men answerers. It is worth noticing that there are nearly twice as many female answerers as men and that ajority of the students are 20 to 30 years old.
+<br />So here we have a large plot matrix of all the 7 variables. Red colour indicates female answerers and blue men answerers. It is worth noticing that there are nearly twice as many female answerers as men and that majority of the students are 20 to 30 years old.
 
-In the column most left we have the distribution of the observations presented in a horizontal way. The same distributions are presented also in a more visual way diagonally. The distributions of age and points are relatively similar between female and men answerers and the most differences can be found from distributions of attitude and surface learning. 
+In the column most left we have the distribution of the observations presented in a horizontal way. The same distributions are presented also in a more visual way diagonally. The distributions of age and points are relatively similar between female and men answerers and the most differences can be found from distributions of attitude (female attitude more evenly distributed between answers of 1-4, men having a higher peak in attitude (3-4)) and surface approach (female having a higher peak (~3)). This could indicate that men had better attitude and motivation than female answerers.
 
-Below this diagonal, we have scatter plots between two variables and above the diagonal we have correlations between two variables in a numerical way. The higher the value of correlation is, the higher is the dependence between these two variables. In case the correlation is negative, the dependence is inverse: _(the value of one variable (y) decreases when the value of the other variable (x) increases)_.
+Below this diagonal, we have scatter plots between two variables and above the diagonal we have correlations between two variables in a numerical way. **The correlation coefficient**, _corr_, refers to Pearson correlation and the values vary between -1 and +1. The closer the value of correlation is to |1|, the higher is the dependence between these two variables. In case the correlation is negative, the dependence is inverse: _(the value of one variable (y) decreases when the value of the other variable (x) increases)_.
 
-The **highest** correlation is between points and attitude (0.437). The next highest correlation is **negative**, and it is between surface approach and deep learning (-0.324). The **weakest** correlation (-0.0101) is between deep learning and points.
+The **highest** correlation is between exam points and attitude (0.437). The next highest correlation is **negative**, and it is between surface approach and deep learning (-0.324). As the subscales of surface approach were mostly negative; _lack of purpose, unrelated memorizing, syllabus-boundness_, it does make sense that the correlation between deep learning and surface approach is negative. The **weakest** correlation (-0.0101) is between deep learning and exam points. It is interesting that these two do not correlate. Could this mean that the deep learning approach - _seeking meaning, relating ideas, use of evidence_ - does not lead to learning that could be measured with exam points? Or is the exam measuring something else than deep learning?
 <br /><br /> 
 
 
@@ -156,11 +177,10 @@ As _deep learning_ has no significance what so ever, it will be excluded from th
 
 <br /> Below we have a summary of a multiple regression including all three variables. Already from the standard error we can see how the value is smallest for the attitude (strongest correlation) and highest for deep learning (weakest correlation).
 
-The multiple R-squared is a square of the correlation coefficient between all three explanatory variables and exam points. The value in this case is 0.2024, meaning that slightly over 20% of the variation in exam points is explained by the variation in the three explanatory variables. 
+**The multiple R-squared** is a square of the correlation coefficient between all three explanatory variables and exam points. The value in this case is 0.2024, meaning that slightly over 20% of the variation in exam points is explained by the variation in the three explanatory variables. 
 
 The value of multiple R-squared is known to increase when adding new explanatory variables, even if the added variable is not useful. Thereby, excluding a variable most likely will decrease the value of multiple R-squared. Thus, it may be useful to also look at the adjusted R-squared, as there the R-squared adjusts for the number of explanatory variables in a model. When all the variables are included the adjusted R-square is 0.1876 (~ 18.8 % of the variation explained). 
 
-As it was pointed above, the deep learning has no significance when it comes to the exam points. Let us examine what happens when we exclude it from the multiple regression.
 <br /><br />
 
 ```{r}
@@ -175,19 +195,10 @@ print(summary(my_model4))
 
 
 <br /> 
-<br /> As expected the value of multiple R-squared decreases, but only slightly. The new values _(see below)_ are; 
-
-* Multiple R-squared 0.1953 (~ 19.5 % of the variation explained) _vs. 20 %_
-* Adjusted R-squared: 0.1854 (~ 18.5 % of the variation explained) _vs. 18.8 %_
-
-There is only small decrease in the R-squared values after excluding deep learning. Thus, slightly less of the variance in exam points is explained by attitude + surf compared to the case of all three variables. 
-
-In addition to R-squared values we may also look at, for example, the p-value. When all the variables are included, the p-value is 5.217e-08 _(above)_ and after deep learning has excluded the p-value is 2.041e-08 _(below)_, ergo the significance has strengthen. Although, the significance is notable in both cases.
-
-The small differences might be due to the fact, that the surface approach on its own does not have significance either. The R-squared value and p-value would be better when taking only attitude into account.
-
-
+<br /> 
+As it was pointed above, the deep learning has no significance when it comes to the exam points. Let us examine what happens when we exclude it from the multiple regression.
 <br /><br />
+
 
 
 ```{r}
@@ -201,12 +212,28 @@ print(summary(my_model5))
 ```
 
 
+
 <br /> 
+<br /> 
+As expected the value of multiple R-squared decreases, but only slightly. The new values _(summary above)_ are; 
+
+* Multiple R-squared 0.1953 (~ 19.5 % of the variation explained) _vs. 20 %_
+* Adjusted R-squared: 0.1854 (~ 18.5 % of the variation explained) _vs. 18.8 %_
+
+There is only small decrease in the R-squared values after excluding deep learning. Thus, slightly less of the variance in exam points is explained by attitude + surf compared to the case of all three variables. 
+
+In addition to R-squared values we could also look at, for example, the p-value. When all the variables are included, the p-value is 5.217e-08 _(first summary)_ and after deep learning has excluded the p-value is 2.041e-08 _(second summary)_, ergo the significance has strengthen. Although, the significance is notable in both cases.
+
+The small differences might be due to the fact, that the surface approach on its own does not have significance either. The R-squared value and p-value would be better when taking only attitude into account.
+
+
+<br /><br />
+
 
 > Diagnostic plots
 
 
-<br /> Next we will draw three diagnostic plots out of the multiple regression, which explanatory variables are above-mentioned attitude and surface learning. The chosen diagnostic plots are _Residuals vs Fitted, Normal QQ-plot_ and _Residuals vs Leverage_ _(table below, 1, 2, 5)_. 
+<br /> Next we will draw three diagnostic plots out of the multiple regression, which explanatory variables are above-mentioned attitude and surface approach The chosen diagnostic plots are _Residuals vs Fitted, Normal QQ-plot_ and _Residuals vs Leverage_ _(table below, 1, 2, 5)_. 
 <br /><br />
 
 
