@@ -1,12 +1,6 @@
 #Author: Janina Taurinen
 #Date: 8.11.2021
 #R-script of the Exercise 2
-
-library(dplyr)
-
-
-lrn14 = read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.txt", sep="\t", header=TRUE)
-
 dim(lrn14)
 #resulting in [1] 183  60 --> 183 observations of 60 variables in the file
 
@@ -14,6 +8,12 @@ str(lrn14)
 #resulting in letter and numeric codes
 #The last rows are Age, Attitude, Points and gender
 #everything else is integer except gender, which is a character "F" or "M"
+library(dplyr)
+
+
+lrn14 = read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.txt", sep="\t", header=TRUE)
+
+
 
 
 #Next the missing variables (deep, surf, stra + attitude) will be formed by combining the questions in a way described in the given txt-file.
