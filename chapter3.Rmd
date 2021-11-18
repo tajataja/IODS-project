@@ -15,7 +15,7 @@ output:
 
 ## Overview of the data
 
-<br /> The purpose of your analysis is to study the relationships between high/low alcohol consumption and some of the other variables in the data. Let us look closer to the data - collected in 2014 in Portuguese secondary schools from a survey about alcohol consumption and student achievement in mathematics (math) and Portuguese language (por) - resulting from the [Data Wrangling] (LISAA LINKKI). 
+<br /> The purpose of the analysis is to study the relationships between high/low alcohol consumption and some of the other variables in the data. Let us look closer to the cleaned data - collected in 2014 in Portuguese secondary schools from a survey about alcohol consumption and students' achievements in mathematics (math) and Portuguese language (por) - resulting from the [Data Wrangling](https://github.com/tajataja/IODS-project/blob/master/data/create_alc.R). 
 
 The same answerers of two different classes have been combined. In addition;
 
@@ -38,7 +38,7 @@ str(pormath)
 colnames(pormath)
 ```
 
-<br />The structure of the data looks good. There are 370 observations of 51 variables, such as gender, age, information about family's education, study time, alcohol consumption etc. The entire attribute information you can find from [here](https://archive.ics.uci.edu/ml/datasets/Student+Performance)
+<br />The structure of the data looks good. There are 370 observations of 51 variables _(see colnames above)_, such as gender, age, information about family's education, study time, alcohol consumption etc. The entire attribute information you can find from [here](https://archive.ics.uci.edu/ml/datasets/Student+Performance).
 <br /><br />
 
 ## Chosen variables and hypothesis
@@ -55,10 +55,10 @@ gather(pormath) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + ge
 ```
 
 
-<br /> To examine the relationships related to the alcohol consumption some variables need to be chosen. Here we have chosen _age, absences, going out with friends (goout)_ and _final grade (G3)_ to be compared with _alcohol consumption (alc_use)_ and whether it is _highly used or not (high_use)_.
+<br /> To examine the relationships related to the alcohol consumption, some variables need to be chosen. In this report we have chosen _age, absences, going out with friends (goout)_ and _final grade (G3)_ to be compared with _alcohol consumption (alc_use)_ and whether it is _highly used or not (high_use)_.
 <br /><br />
 
-> My personal hypothesis
+> My personal hypotheses
 
 - Student's age in relation to alcohol consumption
   + The hypothesis is, that there is positive correlation between these two variables, ergo alcohol consumption is increasing with age. This is mainly due to the law that sets an age limit for alcohol consumption. <br /><br />
@@ -70,13 +70,13 @@ gather(pormath) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + ge
   + The hypothesis is, that there is positive correlation between these two variables, ergo alcohol consumption is the higher the more the student have absences. This is just a hypothesis, the absence does not mean that the student would be out drinking. However, there is stronger possibility for it when it is known that the student is not in school. <br /><br />
   
 - Student's final grade in relation to alcohol consumption
-  + The hypothesis is, that there is negative correlation between these two variables, ergo the higher grades the student have the less the student uses alcohol. The alcohol usage does not necessary affect the ability to success in school subjects. However, again, the alcohol is unlikely used while studying. So the high alcohol consumption may replace the time and capacity of studying. <br /><br />
+  + The hypothesis is, that there is negative correlation between these two variables, ergo the higher grades the student have the less the student uses alcohol. The alcohol usage does not necessary affect the ability to success in school subjects. However, again, the alcohol is unlikely to be used while studying. So the high alcohol consumption may replace the time and capacity of studying. <br /><br />
 <br /><br />
 
 
 ## Numerical and graphical interpretation
 
-<br /> Let us begin with a **numerical overview** all four chosen variables and high/low alcohol consumption; _(high_use) ~ age, goout, absences_ and _final grade (G3)_:
+<br /> Let us begin with a **numerical overview** of all four chosen variables and high/low alcohol consumption; _(high_use) ~ age, goout, absences_ and _final grade (G3)_:
 <br /> <br /> 
 
 ```{r}
@@ -88,7 +88,7 @@ pormath %>% group_by(sex, high_use) %>% summarise(count = n(), mean_age = mean(a
 
 ```
 
-<br /> The mean age is approximately equal for all females and for males that do not use much alcohol. Only the age of males having a high alcohol consumption is slightly higher. The number of females using a lot of alcohol (41 _see females high_use FALSE > 154_) is the smallest out of these four categories (females and males with high/low alcohol consumption). Also the male students using alcohol more than 2 times (high_use) a week are in minority (70 _see males high_use FALSE > 105_).
+<br /> The **mean age** is approximately equal for all females and for males that do not use much alcohol. Only the age of males having a high alcohol consumption is slightly higher. The number of females using a lot of alcohol (41, _see females high_use FALSE > 154_) is the smallest out of these four categories (females and males with high/low alcohol consumption). Also the male students using alcohol more than 2 times a week (high_use) are in minority (70, _see males high_use FALSE > 105_).
 <br /><br />
 
 
@@ -99,7 +99,7 @@ pormath %>% group_by(sex, high_use) %>% summarise(count = n(), mean_go_out = mea
 
 ```
 
-<br /> The mean of going out with friends seem to be higher for those who have high alcohol consumption, in spite of the gender. In addition, females that do not have high alcohol consumption go out more often than males with low alcohol consumption. 
+<br /> The **mean of going out with friends** seem to be higher for those who have high alcohol consumption, in spite of the gender. In addition, females that have low alcohol consumption go out more often than males with low alcohol consumption. 
 <br /><br />
 
 ```{r}
@@ -109,7 +109,7 @@ pormath %>% group_by(sex, high_use) %>% summarise(count = n(), mean_absences = m
 
 ```
 
-<br /> The absences have clear differences related to high/low alcohol consumption. For both, females and males, having a high alcohol consumption the mean of absences is over 6 times when compared to the low alcohol consumers _(see females 4.25 and males 2.91)_. The females that have high alcohol consumption have more absences than males with high alcohol consumption.
+<br /> The **absences** have clear differences related to high/low alcohol consumption. For both, females and males, having a high alcohol consumption the mean of absences is over 6 times when compared to the low alcohol consumers _(see females 4.25 and males 2.91)_. Females that have high alcohol consumption have more absences than males with high alcohol consumption.
 <br /><br />
 
 ```{r}
@@ -119,12 +119,12 @@ pormath %>% group_by(sex, high_use) %>% summarise(count = n(), mean_grade = mean
 
 ```
 
-<br /> The final grades seem very similar for all females, despite their alcohol use. There is even slight increase in grades among females using alcohol more frequently (11.8 _vs. 11.4_). For males a clear difference can be observed. Males not using much alcohol have a lot higher grades (12.3) than the ones using alcohol more often (10.3).
+<br /> The **final grades** seem very similar for all females, despite their alcohol use. There is even slight increase in grades among females using alcohol more frequently (11.8 _vs. 11.4_). For males a clear difference can be observed. Males not using much alcohol have a lot higher grades (12.3) than the ones using alcohol more often (10.3).
 <br /><br />
 
 ### Bar plots
 
-<br /> Let us continue by drawing a bar plots out of all four chosen variables and alcohol consumption; _alc_use, hihg_use, age, goout, absences_ and _final grade (G3)_:
+<br /> Let us continue by drawing a bar plots out of all four chosen variables and alcohol consumption; **A** _age_, **B** _goout_, **C** _absences_, **D** _final grade (G3)_, **E** _alc_use_ and **F** _high_use_:
 <br /><br />
 
 
@@ -188,15 +188,15 @@ p
 
 <br /> There are few more female answerers than men. The distribution shown along the diagonal of the plot series are fairly similar between female and male, excluding age and alcohol consumption. The age distribution has higher peaks for females and high alcohol usage is slightly more common among males. 
 
-There seems to be **high correlation** between alcohol consumption all chosen variables; age _(0.16)_, goout _(0.389)_, absences _(0.214)_, G3 - final grade _(-0.156)_. Only the correlation between final grade and alcohol consumption is **negative**. These relations follow the hypothesis presented above. However, there are notable differences between these two genders. _Age_ and _final grades_ of females do **not correlate** with alcohol consumption. For male answerers all chosen variables do correlate with alcohol consumption.
+There seems to be **high correlation** between alcohol consumption and all chosen variables; age _(0.16)_, goout _(0.389)_, absences _(0.214)_, G3 - final grade _(-0.156)_. Only the correlation between final grade and alcohol consumption is **negative**. These relations follow the hypothesis presented above. However, there are notable differences between two genders. _Age_ and _final grades_ for females do **not correlate** with alcohol consumption. For male answerers all chosen variables do correlate with alcohol consumption.
 
-**According to the correlations the hypotheses were mainly good**. I did not make a differences between female and male students so that brought couple of surprises. The lack of correlation of age and final grades with alcohol usage for females was not expected. When the genders are combined the observations follow the above-mentioned hypotheses. 
+**According to the correlations the hypotheses are mainly good**. I did not make differences between female and male students so that brought couple of surprises. The lack of correlation of age and final grades with alcohol usage for females was not expected. When the genders are combined the observations follow the above-mentioned hypotheses. 
 <br /><br />
 
 
 ### Box plots
 
-<br /> Let us still look at the box plots. We will be comparing one of the chosen variables with whether the student has a high alcohol consumption or not. 
+<br /> Let us still look at the box plots. We will be comparing the chosen variables with whether the student has a high alcohol consumption or not; **A** _age_, **B** _goout_, **C** _absences_, **D** _final grade (G3)_.
 <br /><br />
 
 
@@ -223,11 +223,11 @@ plot_grid(g11, g22, g33, g44, labels = "AUTO")
 ```
 
 
-<br /> In box plots the thicker line in the middle of the box shows the median of the answers. The edges of the box show the lower and upper quartile of the observations. The vertical lines outside the box are whiskers and the dots represent the maximum and minimum answers.
+<br /> In box plots the thicker line in the middle of the box shows the median of the answers. The edges of the box show the lower and upper quartile of the observations. The vertical lines outside the box are called 'whiskers' and the dots represent the maximum and minimum answers.
 
-High consumption of alcohol is slightly more common among males with higher age (~17 years). Otherwise the age **does no** have clear influence according to the box plot. Instead, the **correlation between going out with friends and high alcohol usage** is clearly visible. The median of goout for females and males is approximately 4 times a week where the students with low alcohol consumption have a median of goout = 3. 
+High consumption of alcohol is slightly more common among males with higher age (~17 years). Otherwise the age **does not** have clear influence according to the box plot. Instead, the **correlation between going out with friends and high alcohol usage** is clearly visible. The median of goout for females and males is approximately 4 times a week where the students with low alcohol consumption have a median of goout = 3. 
 
-Also **absences** are more common when there is high alcohol usage (positive correlation). The differences seem small in the box plot. This is because the maximum values of absences are far from the median (exceeding even 40 absences). However, the above examined numerical tables and correlations reveal the truth among students that are not missing the classes over 20 times. When looking at the final grades the **negative correlation is visible with males**, ergo for males the grades are higher when the alcohol consumption is low. For females there are no clear differences perceptible. 
+Also **absences** are more common when there is high alcohol usage (positive correlation). The differences may seem small in the box plot, but this is only because the maximum values of absences are far from the median (exceeding even 40 absences). However, the above examined numerical tables and correlations reveal the truth among students that are not missing the classes over 20 times. When looking at the final grades the **negative correlation is visible with males**, ergo for males the grades are higher when the alcohol consumption is low. For females there are no clear differences perceptible. 
 <br /><br />
 
 
@@ -249,9 +249,14 @@ coef(m)
 
 ```
 
-<br /> We may start from the p-values (Pr(>|z|)) of the variables. The z and p-values in the regression table tell whether the pairwise difference between the coefficient of the reference class and the other class is different from zero or not. Variables _goout_ and _absences_ stand out as they are clearly significant in terms of explaining the target variable. Age and final grades _(G3)_ seem to be just outside the level of significance and final grades _(G3)_ just inside. However, in case only one categorical class is significant, this does not imply that the whole variable is meaningless and should be removed from the model.
+<br /> We will start from the p-values (Pr(>|z|)) of the variables. The z and p-values in the regression table tell whether the pairwise difference between the coefficient of the reference class and the other class is different from zero or not. Variables _goout_ and _absences_ stand out as they are clearly significant in terms of explaining the target variable. Age and final grades _(G3)_ seem to be just outside the level of significance. However, for example, if only one categorical class would be significant, it would not imply that the whole variable is meaningless and should be removed from the model.
+<br /><br />
 
-Next we will look closer to coefficients of the model as odds ratios. We will also provide a confidence interval for them.
+### Odds ratios and confidence interval
+
+<br />
+
+Next we will look closer to coefficients of the model as **odds ratios**. We will also provide a **confidence interval** for them.
 <br /><br />
 
 
@@ -268,12 +273,12 @@ cbind(OR, CI)
 
 ```
 
-<br /> The odds ratio is used to quantify the relationship between chosen variables and target variable. Odds **higher than 1** means that the chosen variable is associated with TRUE of the target variable (student has high alcohol consumption). The odds ratio is highest for go_out. It exceeds one also for age and absences. Odds ratio for final grade is the only one remaining under 1 _(~0.96)_.
+<br /> The odds ratio is used to quantify the relationship between chosen variables and target variable. Odds **higher than 1** mean that the chosen variable is associated with TRUE of the target variable (student has high alcohol consumption). The odds ratio is highest for go_out. Odds ratio exceeds one also for age and absences. Final grade is the only which odds ratio is remaining under 1 _(~0.96)_.
 
 Let us look closer to the confidence intervals. In case the confidence interval contains the value one we can conclude that there is **no evidence of an association** between chosen variable and target variable. In our case this applies for age _(0.8 - 1.3)_ and final grade _(0.9 - 1.0)_. Thus, there is no association between high_use and age or final grade. Instead, both go_out and absences' confidence intervals are above one, and thereby they do have some association with the high alcohol consumption.
 
 
-These results would lead to new conclusions. Even though there has been small correlation visible between age and final grades in terms of high_use, according to odds ratios and confidence intervals they should _not be included_ into the model anymore. Their association is too small or casual. As predicted in the hypothesis **going out with friends and absences from lessons do associate with high alcohol consumption**. Thus, let us keep these to variables (goout, absences) and move on to explore the predictive power of you model.
+These results would lead to a new conclusion. Even though there has been small correlation visible between age and final grades in terms of high_use, according to odds ratios and confidence intervals they should _not be included_ into the model anymore. Their association is too small or casual. As predicted in the hypothesis **going out with friends and absences from lessons do associate with high alcohol consumption**. Thus, let us keep these two variables (goout, absences) and move on to explore the predictive power of our model.
 <br /><br />
 
 
@@ -301,9 +306,9 @@ select(alc, goout, absences, sex, high_use, probability, prediction) %>% tail(10
 
 ```
 
-<br /> Above we have now a table for comparing the real values and the values originating from the probabilities and predictions. In case probability (to use alcohol more than 2 times a week) is 50% (0.5) the prediction results TRUE. In the table above we have last 10 observations and one could say that the prediction do not look too good. 7 of the 10 observations are in reality categorized as high_use = TRUE, but the predictions are all FALSE. 
+<br /> Above we have now a table for comparing the real values and the values originating from the probabilities and predictions. In case probability (to use alcohol more than 2 times a week) is 50% (0.5) the prediction results TRUE. In the table above we have last 10 observations of our data and one could say that the predictions do not look too good. 7 out of the 10 observations are in reality categorized as high_use = TRUE, but the predictions are all FALSE. 
 
-Let us tabulate the target variable (high_use) versus the predictions to see how well the predictions really work.
+Let us tabulate the target variable (high_use) versus the predictions to see how well the predictions actually work.
 <br /><br />
 
 ```{r}
@@ -323,6 +328,16 @@ table(high_use = alc$high_use, prediction = alc$prediction)
 table(high_use = alc$high_use, prediction = alc$prediction) %>% prop.table() %>% addmargins()
 
 
+```
+
+<br />Above we see that the model has got ~64 % correct of the students not using a lot of alcohol. ~19 % have been predicted correctly to have a high alcohol consumption.
+
+The share of the inaccurately classified individuals (miss-predicted observations) - ergo _training error_ - has been calculated using below defined loss_function. The function in practice sums the wrong predictions in the data. **The share of training error is ~0.24** _(~0.06 + ~0.18 = ~0.24)_.
+<br /><br />
+
+
+```{r}
+
 #Defining a loss function (mean prediction error)
 #Class is here high_use
 loss_func <- function(class, prob) {
@@ -335,11 +350,7 @@ loss_func(class = alc$high_use, prob = alc$probability)
 
 ```
 
-<br />Here see that the model has got ~64 % correct of the students not using a lot of alcohol. ~19 % have been predicted correctly to have a high alcohol consumption.
-
-The share of the inaccurately classified individuals (miss-predicted observations) - _training error_ - has been calculated using above defined loss_function. The function in practice sums the wrong predictions in the data. **The share of training error is ~0.24** _(~0.06 + ~0.18 = ~0.24)_.
 <br /><br />
-
 
 ## 10-fold cross-validation
 
@@ -363,7 +374,7 @@ cv$delta[1]
 
 ```
 
-<br /> The training error of our model is 0.2378378 ~ 0.24. This is slightly less than what the 10-fold cross-validation suggests, which suggests that our model has better test set performance. For some reason the prediction error of 10-fold cross-validation varies somewhat every time. The varying happens between (24 % - 26 %) 
+<br /> The training error of our model is 0.2378378 ~ 0.24. This is slightly less than what the 10-fold cross-validation suggests. This implies that our model has a better test set performance. For some reason the prediction error of 10-fold cross-validation varies somewhat every time it has been ran. The varying happens between (24 % - 26 %) 
 <br /><br />
 
 ***
@@ -372,7 +383,7 @@ cv$delta[1]
 
 > _Summary of my learning_
 
-<br /> This week's tasks were even more challenging than lats week. Everything is not clear but I think I managed well to complete all the necessary tasks + one bonus task. New plots were used and learned. Using the prediction model and all those odds ratios and 10-fold cross-validations were new and interesting ways to check whether the variables are really associated and whether they could be predicted. 
+<br /> This week's tasks were more challenging than lats week. Even now, everything is not clear but I think I managed well to complete all the necessary tasks + one bonus task. New plots were used and learned. Using the prediction model and all those odds ratios and 10-fold cross-validations were new and interesting ways to check if the variables do really associate and whether they could be predicted. 
 <br /><br />
 
 ***
