@@ -1,0 +1,330 @@
+---
+output:
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_depth: 2
+    fig_caption: true
+    fig_width: 13
+    fig_height: 9
+---
+
+# Chapter 5 - Dimensionality reduction techniques
+
+***
+
+## Overview of the data
+
+<br /> In this analysis we will be using data set called _"human"_, which is a combination of the following two data sets: 
+
+- [human development](http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/human_development.csv)
+- [gender inequality](http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/gender_inequality.csv)
+
+Meta file for these data sets can be found from [here](http://hdr.undp.org/en/content/human-development-index-hdi)
+
+Let us look closer how does the data look like.
+<br /><br /> 
+
+```{r}
+date()
+
+human = read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/human2.txt", sep=",", header=TRUE)
+
+#Let us see the dimensions and structure of the data set
+dim(human)
+str(human)
+
+```
+
+<br /> There are 155 observations of  8 variables:
+
+- _Edu2.FM  "PSE_ratio"_ > Ratio of Female and Male populations with secondary education in each country
+- _Labo.FM "LFPR_ratio"_ > Ratio of labour force participation of females and males in each country
+- _Edu.Exp  "EYE"_ > Expected Years of Education
+- _Life.Exp "LEB"_ > Life Expectancy at Birth
+- _GNI_ > Gross National Income (GNI) per Capita
+- _Mat.Mor  "MMR"_ > Maternal Mortality Ratio
+- _Ado.Birth "ABR"_ > Adolescent Birth Rate
+- _Parli.F "PRP"_ > Percent Representation in Parliament
+
+Let us next show a graphical overview of the data:
+<br /><br /> 
+
+
+```{r}
+
+library(GGally)
+library(dplyr)
+library(corrplot)
+
+#Visualizing the 'human' variables
+ggpairs(human)
+
+```
+
+<br /> Above we have used a generalized pairs plot from the GGally package to visualize the data frame. 
+
+From the **distributions** of the variables we can say, that the _expected years of life_ and _education_ are both relatively **high**. The _ratio of labour force participation of females_ and _males in each country_ shows also a relatively high peak. In turn, the amount of _GNI, maternal mortality_ and _adolesent birth rate_ are relatively **low**. Also the _percent representation of females in parliament_ is quite low.
+<br /><br />
+
+```{r}
+#Computing the correlation matrix and visualizing it with corrplot
+cor(human) %>% corrplot
+
+```
+
+
+<br /> 
+To study the linear connections, a cor() function has been used. The output has been visualized with the corrplot function. From the corrplot we can see that:
+
+- The **highest correlation** is between 
+  - _Life Expectancy at Birth_ and _Expected Years of Education_ (0.789)
+  - _Adolescent Birth Rate_ and _Maternal Mortality Ratio_ (0.759)
+<br /><br /> 
+- The **lowest (ergo negative) correlation** is between 
+  - _Maternal Mortality Ratio_ and _Life Expectancy at Birth_ (-0.857)
+  - _Maternal Mortality Ratio_ and _Expected Years of Education_ (-0.736)
+  - _Adolescent Birth Rate_ and _Life Expectancy at Birth_ (-0.729)
+
+<br />Next we will move to the PCA
+
+<br />
+
+## Principal Component Analysis (PCA)
+
+<br /> 
+
+Principal component analysis (PCA) is used in exploratory data analysis and for making predictive models. It is a statistical procedure that decomposes a matrix into a product of smaller matrices and then reveals the most important component.
+
+In PCA, the data is first transformed to a new space with equal or less number of dimensions > _new features_. These new features are called the **principal components**, which always have the following properties:
+
+- **1st** principal component captures the maximum amount of variance from the features in the original data.
+- **2nd** principal component is _orthogonal_ to the first and it captures the maximum amount of variability left.
+<br /><br /> 
+- All principal components are **uncorrelated** and each is _less_ important than the previous one, in terms of captured variance.
+
+
+<br /> Let us perform the PCA with Singular Value Decomposition (SVD) for our **_(not standardized)_** data.
+
+<br /><br /> 
+
+```{r}
+
+#Performing PCA with the SVD method
+pca_human <- prcomp(human)
+
+#Creating a summary of pca_human
+s <- summary(pca_human)
+s
+
+#Rounded percetanges of variance captured by each PC
+pca_pr <- round(100*s$importance[2, ], digits = 1)
+
+#The percentages of variance
+pca_pr
+
+#Creating object pc_lab (by the first two principal components) to be used as axis labels
+pc_lab <- paste0(names(pca_pr), " (", pca_pr, "%)")
+
+#Drawing a biplot
+biplot(pca_human, cex = c(0.8, 1), col = c("grey40", "deeppink2"), xlab = pc_lab[1], ylab = pc_lab[2])
+
+```
+
+<br /> 
+And now we repeat the Principal Component Analysis and its visualization for **standardized** 'human' data.
+<br /><br /> 
+
+```{r}
+
+#Standardizing the variables
+human_s <- scale(human)
+
+#Performing PCA with the SVD method
+pca_human_s <- prcomp(human_s)
+
+#Creating a summary of pca_human
+s_s <- summary(pca_human_s)
+s
+
+#Rounded percetanges of variance captured by each PC
+pca_pr_s <- round(100*s_s$importance[2, ], digits = 1)
+
+#The percentages of variance
+pca_pr_s
+
+#Creating object pc_lab (by the first two principal components) to be used as axis labels
+pc_lab_s <- paste0(names(pca_pr_s), " (", pca_pr_s, "%)")
+
+#Drawing a biplot
+biplot(pca_human_s, cex = c(0.8, 1), col = c("grey40", "deeppink2"), xlab = pc_lab_s[1], ylab = pc_lab_s[2])
+
+```
+
+<br />
+
+### Comparison between standardized and non-standardized PCA
+
+<br /> The importance of components _(see tables above)_: Standard deviation, Proportion of Variance, Cumulative Proportion are all equal to both cases (standardized and not). 
+
+However, as we do the rounding of variance captured by each PC notable differences occur. In case the data has _not_ been standardized **all the variance is captured by the first PC (PC1)**. This makes the scaling of the biplot odd and the graph hard to look at and interpret. The Gross National Income (GNI) per Capita is overpowering all the other features and it is contributing to the dimension of PC1 (which makes sense, as all the variation has been captured by PC1).
+
+When the data has been standardized **the variance is captured by all 8 PC's**:
+
+ PC1 | PC2 | PC3 | PC4 | PC5 | PC6 | PC7 | PC8 | 
+|:------|:------|:------|:------|:------|:------|:------|:------| 
+| 53.6% | 16.2% | 9.6% | 7.6% | 5.5% | 3.6% | 2.6% | 1.3% |
+
+The points presented in the beginning of PCA-chapter apply: most of the variance is captured by the firs PC (PC1 - 53.6%) and every PC is less important than the previous one.
+
+From the standardized graph it is easy to interpret the relation between variables:
+
+***
+
+_notes_
+
+**1.** A scatter plot is drawn where the observations are placed on x and y coordinates defined by two first principal components PC1 (x) and PC2 (y)
+
+**2.** Arrows are drawn to visualize the connections between the original features and the PC's
+
+  - Angle between arrows > correlation between the features _(small angle = high positive correlation)_
+
+  - Angle between a feature and a PC axis > correlation between the two. _(small angle = high positive correlation)_
+
+  - Length of the arrow is proportional to the standard deviation of the feature
+
+***
+
+**In the standardized graph:**
+
+- There is **positive correlation** between following features:
+  
+  - 1st batch (pointing left): _Expected Years of Education, Gross National Income (GNI) per Capita, Ratio of Female and Male populations with secondary education in each country_ and _Life Expectancy at Birth_
+  
+  - 2nd batch (pointing up): _Percent Representation in Parliament_ and _Ratio of labour force participation of females and males in each country_
+  
+  - 3rd batch (pointing right): _Maternal Mortality Ratio_ and _Adolescent Birth Rate_
+  
+- There is **no correlation** between arrows that are orthogonal:
+  - The 2nd batch (defined above) do not correlate with features from any of the other batches.
+<br /><br />
+- There is **negative correlation** between arrows that are pointing to opposite directions:
+  - The 1st and 3rd batches of variables correlate negatively between each other. 
+
+<br />
+
+About the **contribution** of the principle components:
+
+- 1st and 3rd batches of arrows are aligned with the x-axis (PC1). So these features are contributing to that dimension.
+
+- 2nd batch of arrows is aligned with the y-axis (PC2). So these features are contributing to that dimension.
+
+<br /><br /> 
+
+## Multiple Correspondence Analysis
+
+<br /> For Multiple Correspondence Analysis, let us first load the 'tea' data set from the package 'Factominer'. The structure of the data is explored and visualized below. 
+<br /><br />
+
+```{r}
+
+library(FactoMineR)
+library(ggplot2)
+library(tidyr)
+
+#Loading the data
+data("tea")
+
+#Exploring the data set
+str(tea) #300 obs. of  36 variables:
+
+
+#36 variables is a lot, let us choose couple to examine closer 
+
+
+#Column names to keep in the data set
+keep_columns <- c("Tea", "How", "how", "sugar", "where", "lunch")
+
+#Selecting the 'keep_columns' to create a new data set
+tea_time <- dplyr::select(tea, one_of(keep_columns))
+
+#The summaries and structure of the data
+summary(tea_time)
+str(tea_time)
+
+#Visualization of the data set
+gather(tea_time) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+
+```
+
+<br /> There is 300 observations of 36 variables. As 36 variables is quite a lot, only six of them has been taken into closer examination above: _how, How, lunch, sugar, Tea_ and _where_. It seems that it is most common to drink tea alone using ready-made tea bags _(How and how)_. There is some people drinking tea during lunch time but most of the answerers drink their tea at some other point of the day _(lunch)_. It is nearly as common to drink the tea with sugar as it is not to use sugar _(sugar)_. Earl Grey is clearly most used tea type (compared to black and green tea) _(Tea)_. The tea is most likely from a chain store but also some people do buy their tea from tea shops _(where)_.
+
+Thus, if all the results could be **concluded**: It seems that it is most common to drink Earl Grey - bought from a chain store -  using ready-made tea bags and without sugar alone during some other time of the day than lunch time.
+<br /><br /> 
+
+***
+
+Let us do the **Multiple Correspondence Analysis (MCA)** next. MCA is a dimensionality reduction method, used to analyse the pattern of relationships of several categorical variables. MCA is a generalization of PCA. The general aim is to condense and present the information of the cross-tabulations of categorical variables in a clear graphical form. 
+<br /><br /> 
+
+```{r}
+
+#Multiple correspondence analysis
+mca <- MCA(tea_time, graph = FALSE)
+
+#Summary of the model
+summary(mca)
+
+```
+
+<br /> In the summary of MCA we have first the **Eigenvalues**. There we can see the variances and the percentage of variances retained by each (11) dimension. 
+
+Then we have **Individuals**. Here we have the 10 first individuals coordinates, individuals contribution (%) on the dimension and the cos2 (the squared correlations) on the dimensions.
+
+The summary contains also **Categories**. Here we have for the 10 first; the coordinates of the variable categories, the contribution (%), the cos2 (the squared correlations) and v-test value. 
+_Note_, that the v-test follows normal distribution, ergo in case the value is below/above ± 1.96, the coordinate is significantly different from zero. This applies for most of the categories, excluding _alone_ and _other_ in the first table and _green, milk_ and _tea bag+unpackaged_ in the second table.
+
+Lastly we have **Categorical variables**. There we have the squared correlation between each variable and the dimensions. Values close to 1 indicate a strong link with the variable and dimension. See _how_ and _Dim.1_ (0.708); _where_ and _Dim.1_ (0.702).
+<br /><br /> 
+
+```{r}
+
+#Visualization of MCA
+plot(mca, invisible=c("ind"), habillage = "quali", graph.type = "classic")
+
+```
+
+<br /> Here we have MCA factor map as biplot. The variables have been drawn on the first two dimensions (Dim 1 explaining ~15% and Dim 2 ~14%). The distance between variable categories giver a measure of their similarity _(the more close the more similar)_.
+
+- The following are **similar** together:
+  - _milk, Earl Grey_ and _sugar_
+  - _tea bag_ and _chain store_
+  - _Not lunch_ and _alone_
+  - _unpackaged_ and _tea shop_
+  
+<br /> 
+
+- The following **differ** from all the others:
+  - _other_
+  - _lemon_
+  - _green_
+  - _unpackaged_ and _tea shop_ > similar together but differ from all the others
+
+
+<br />
+
+***
+
+<br /> 
+
+> _Summary of my learning_
+
+<br /> This week I got answers to some of the questions I had last week. The explanations how to interpret biplots were especially important and interesting. I think everything went well this week and therefore I am feeling quite exited!
+<br /><br />
+
+***
+
+
+Regards,
+_Janina_
+
