@@ -42,7 +42,7 @@ colnames(hd) #HDI.Rank,Country,HDI,LEB,EYE,MYE,GNI,GNI_HDI
 colnames(gii)[3] <- "GII" #"Gender.Inequality.Index..GII." 
 colnames(gii)[4] <- "MMR" #"Maternal.Mortality.Ratio" 
 colnames(gii)[5] <- "ABR" #"Adolescent.Birth.Rate"  
-colnames(gii)[6] <- "PRP" #"Percent.Representation.in.Parliament" 
+colnames(gii)[6] <- "PRP" #"Percent.Representation.in.Parliament..Female" 
 colnames(gii)[7] <- "PSE_F" #"Population.with.Secondary.Education..Female."
 colnames(gii)[8] <- "PSE_M" #"Population.with.Secondary.Education..Male."
 colnames(gii)[9] <- "LFPR_F" #"Labour.Force.Participation.Rate..Female."
@@ -67,3 +67,13 @@ hd_gii <- inner_join(hd, gii, by = "Country", suffix = c(".hd", ".gii"))
 #Let us check that all the columns and dimensions exist
 colnames(hd_gii)
 dim(hd_gii)
+
+
+#Let us wrap the data into txt-file
+write.table(hd_gii, file = "hd_gii.txt", sep=",", row.names = TRUE, col.names = TRUE)
+
+#And finally a try-out that the text-file works and looks appropriate
+testi = read.table(file="hd_gii.txt", sep=",", header=TRUE)
+str(testi)
+
+#Looks good! 
