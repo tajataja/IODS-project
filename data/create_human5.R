@@ -7,6 +7,7 @@
 #Data source (Gender inequality): http://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/gender_inequality.csv
 
 library(stringr)
+library(dplyr)
 
 #Reading the data
 human = read.table(file="hd_gii.txt", sep=",", header=TRUE)
@@ -52,24 +53,20 @@ complete.cases(human)
 data.frame(human[-1], comp = complete.cases(human))
 
 #Filtering out all rows with NA (missing) values
-human_na <- filter(human, complete.cases(human) == TRUE)
+human <- filter(human, complete.cases(human) == TRUE)
 
 
+#Removing the observations which relate to regions instead of countries
 
+#The last 10 observations of human
+tail(human, 10)
 
-
-#Remove the observations which relate to regions instead of countries. (1 point)
-
-
-
-
-
-#Row names according to the Country
-#The last indice we want to keep
-last <- nrow(human_na)
+#Defining the last indice we want to keep (checked from the data)
+last <- nrow(human) - 7
 
 #Choosing everything until the last 7 observations
-human_ <- human_na[1:last,]
+human_ <- human[1:last,]
+human_
 
 #Adding countries as rownames
 rownames(human_) <- human_$Country
@@ -79,20 +76,14 @@ human_ <- select(human_, -Country)
 
 human_
 str(human_)
-#162 variables --> should be 155
-
-#Add when correct
-
-
-
 
 
 #Let us wrap the data into txt-file
-#write.table(human_, file = "human.txt", sep=",", row.names = TRUE, col.names = TRUE)
+write.table(human_, file = "human5.txt", sep=",", row.names = TRUE, col.names = TRUE)
 
 #And finally a try-out that the text-file works and looks appropriate
-#testi = read.table(file="human.txt", sep=",", header=TRUE)
-#str(testi)
+testi = read.table(file="human5.txt", sep=",", header=TRUE)
+str(testi)
 
 #Looks good!
 
